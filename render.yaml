@@ -1,32 +1,15 @@
- # Minio Storage Server
+version: '3.8'
+
+services:
   minio:
-    image: minio/minio
+    image: quay.io/minio/minio
     container_name: minio
-    dockerfilePath: ./Dockerfile
-    environment:
-      - MINIO_ROOT_USER=admin
-      - MINIO_ROOT_PASSWORD=password
-      - MINIO_DOMAIN=minio
-      - MINIO_REGION_NAME=us-east-1
-      - MINIO_REGION=us-east-1
     ports:
       - "9000:9000"
       - "9001:9001"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "https://docker-minio.onrender.com:9000/minio/health/live"]
-      interval: 30s
-      timeout: 20s
-      retries: 3
+    environment:
+      MINIO_ROOT_USER: admin # substitua pelo seu usuário
+      MINIO_ROOT_PASSWORD: password123 # substitua pela sua senha
+    command: server /data --console-address :9001
     volumes:
-      - ./minio-data:/minio-data  # Mount the local folder to container
-    entrypoint: >
-      /bin/sh -c "
-      minio server /data --console-address ':9001' &
-      sleep 5;
-      mc alias set myminio https://docker-minio.onrender.com:9000 admin password;
-      mc mb myminio/datalake;
-      mc mb myminio/datalakehouse;
-      mc cp --recursive /minio-data/ myminio/datalake/;
-      tail -f /dev/null"
-    networks:
-      intro-network:
+      - ./data:/data
