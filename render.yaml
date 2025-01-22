@@ -13,7 +13,7 @@
       - "9000:9000"
       - "9001:9001"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      test: ["CMD", "curl", "-f", "https://docker-minio.onrender.com:9000/minio/health/live"]
       interval: 30s
       timeout: 20s
       retries: 3
@@ -23,7 +23,7 @@
       /bin/sh -c "
       minio server /data --console-address ':9001' &
       sleep 5;
-      mc alias set myminio http://localhost:9000 admin password;
+      mc alias set myminio https://docker-minio.onrender.com:9000 admin password;
       mc mb myminio/datalake;
       mc mb myminio/datalakehouse;
       mc cp --recursive /minio-data/ myminio/datalake/;
