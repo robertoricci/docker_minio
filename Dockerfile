@@ -1,4 +1,3 @@
-# Dockerfile para MinIO AIO
 
 # Base image
 FROM minio/minio
@@ -13,11 +12,10 @@ ENV MINIO_ROOT_USER=admin \
 # Expose MinIO and Console ports
 EXPOSE 9000 9001
 
-# Entrypoint command to set up and run MinIO
-CMD ["/bin/sh", "-c", "\
-    minio server /data --console-address ':9001' & \
-    sleep 5; \
-    mc alias set myminio http://localhost:9000 admin password; \
-    mc mb myminio/datalake; \
-    mc mb myminio/datalakehouse; \
-    tail -f /dev/null"]
+# Copy initialization script
+COPY init.sh /usr/bin/init.sh
+RUN chmod +x /usr/bin/init.sh
+
+# Entrypoint command
+ENTRYPOINT ["minio"]
+CMD ["server", "/data", "--console-address", ":9001"]
