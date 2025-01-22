@@ -4,7 +4,7 @@
 sleep 5
 
 # Configura o alias do MinIO
-mc alias set myminio http://localhost:9000 "$MINIO_ROOT_USER" "$MINIO_ROOT_PASSWORD"
+mc alias set myminio https://docker-minio.onrender.com:9000 "$MINIO_ROOT_USER" "$MINIO_ROOT_PASSWORD"
 
 # Cria buckets
 mc mb myminio/datalake
